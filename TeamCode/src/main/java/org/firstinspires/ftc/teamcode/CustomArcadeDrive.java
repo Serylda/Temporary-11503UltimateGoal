@@ -37,6 +37,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class CustomArcadeDrive extends LinearOpMode {
 
     Mecanum mDrive = new Mecanum();
+    
+    static final double power = 1;
 
     @Override
     public void runOpMode()
@@ -49,31 +51,45 @@ public class CustomArcadeDrive extends LinearOpMode {
         {
             if (gamepad1.dpad_up)
             {
-                mDrive.LF.setPower(0.5);
-                mDrive.LB.setPower(0.5);
-                mDrive.RB.setPower(0.5);
-                mDrive.RF.setPower(0.5);
+                mDrive.LF.setPower(power);
+                mDrive.LB.setPower(power);
+                mDrive.RB.setPower(power);
+                mDrive.RF.setPower(power);
             }
             else if (gamepad1.dpad_down)
             {
-                mDrive.LF.setPower(-0.5);
-                mDrive.LB.setPower(-0.5);
-                mDrive.RB.setPower(-0.5);
-                mDrive.RF.setPower(-0.5);
+                mDrive.LF.setPower(-power);
+                mDrive.LB.setPower(-power);
+                mDrive.RB.setPower(-power);
+                mDrive.RF.setPower(-power);
             }
             else if (gamepad1.dpad_left)
             {
-                mDrive.LF.setPower(-0.5);
-                mDrive.LB.setPower(0.5);
-                mDrive.RF.setPower(0.5);
-                mDrive.RB.setPower(-0.5);
+                mDrive.LF.setPower(-power);
+                mDrive.LB.setPower(power);
+                mDrive.RF.setPower(power);
+                mDrive.RB.setPower(-power);
             }
             else if (gamepad1.dpad_right)
             {
-                mDrive.LF.setPower(0.5);
-                mDrive.LB.setPower(-0.5);
-                mDrive.RF.setPower(-0.5);
-                mDrive.RB.setPower(0.5);
+                mDrive.LF.setPower(power);
+                mDrive.LB.setPower(-power);
+                mDrive.RF.setPower(-power);
+                mDrive.RB.setPower(power);
+            }
+            else if(gamepad1.left_bumper)
+            {
+                mDrive.LF.setPower(-power / 2);
+                mDrive.LB.setPower(-power / 2);
+                mDrive.RF.setPower(power / 2);
+                mDrive.RB.setPower(power / 2);
+            }
+            else if(gamepad1.right_bumper)
+            {
+                mDrive.LF.setPower(power / 2);
+                mDrive.LB.setPower(power / 2);
+                mDrive.RF.setPower(-power / 2);
+                mDrive.RB.setPower(-power / 2);
             }
             else
             {
@@ -82,8 +98,6 @@ public class CustomArcadeDrive extends LinearOpMode {
 
         }
     }
-
-
 
     public void freeze()
     {

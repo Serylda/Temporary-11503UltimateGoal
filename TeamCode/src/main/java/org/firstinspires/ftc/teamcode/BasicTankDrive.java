@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="Tank", group="Tank")
-//@Disabled
+@Disabled
 public class BasicTankDrive extends LinearOpMode {
     
     Mecanum mDrive = new Mecanum();
@@ -67,7 +67,7 @@ public class BasicTankDrive extends LinearOpMode {
             }
             else
             {
-                freeze();
+                mDrive.freeze();
             }
                 
             
@@ -75,12 +75,4 @@ public class BasicTankDrive extends LinearOpMode {
     }
 
 
-
-    public void freeze()
-    {
-        mDrive.LF.setPower(0);
-        mDrive.LB.setPower(0);
-        mDrive.RB.setPower(0);
-        mDrive.RF.setPower(0);
-    }
 }
