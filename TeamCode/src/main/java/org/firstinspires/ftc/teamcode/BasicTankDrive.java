@@ -50,20 +50,20 @@ public class BasicTankDrive extends LinearOpMode {
         {
             if (Math.abs(gamepad1.left_stick_y) > 0.2)
             {
-                mDrive.LF.setPower(gamepad1.left_stick_y);
-                mDrive.LB.setPower(gamepad1.left_stick_y);
+                mDrive.FL.setPower(gamepad1.left_stick_y);
+                mDrive.BL.setPower(gamepad1.left_stick_y);
             }
             if (Math.abs(gamepad1.right_stick_y) > 0.2)
             {
-                mDrive.RB.setPower(gamepad1.right_stick_y);
-                mDrive.RF.setPower(gamepad1.right_stick_y);
+                mDrive.BR.setPower(gamepad1.right_stick_y);
+                mDrive.FR.setPower(gamepad1.right_stick_y);
             }
             if (gamepad1.dpad_right)
             {
-                mDrive.LF.setPower(0.5);
-                mDrive.LB.setPower(-0.5);
-                mDrive.RB.setPower(-0.5);
-                mDrive.RF.setPower(0.5);
+                mDrive.FL.setPower(0.5);
+                mDrive.BL.setPower(-0.5);
+                mDrive.BR.setPower(-0.5);
+                mDrive.FR.setPower(0.5);
             }
             else
             {

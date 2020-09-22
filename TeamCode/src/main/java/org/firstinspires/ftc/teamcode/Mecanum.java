@@ -6,19 +6,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Mecanum {
     
-    public DcMotor LF; //Motor 0
-    public DcMotor LB; //Motor 1
-    public DcMotor RB; //Motor 2
-    public DcMotor RF; //Motor 3
+    public DcMotor FL; //Motor 0
+    public DcMotor BL; //Motor 1
+    public DcMotor BR; //Motor 2
+    public DcMotor FR; //Motor 3
     
     HardwareMap hwmap;
     
     public Mecanum()
     {
-        LF = null;
-        LB = null;
-        RB = null;
-        RF = null;
+        FL = null;
+        BL = null;
+        BR = null;
+        FR = null;
         hwmap = null;
     }
     
@@ -26,30 +26,30 @@ public class Mecanum {
     {
         hwmap = h;
 
-        LF = hwmap.get(DcMotor.class, "LM0");
-        LB = hwmap.get(DcMotor.class, "LM1");
-        RB = hwmap.get(DcMotor.class, "RM2");
-        RF = hwmap.get(DcMotor.class, "RM3");
+        FL = hwmap.get(DcMotor.class, "LM0");
+        BL = hwmap.get(DcMotor.class, "LM1");
+        BR = hwmap.get(DcMotor.class, "RM2");
+        FR = hwmap.get(DcMotor.class, "RM3");
 
-        LF.setPower(0);
-        LB.setPower(0);
-        RB.setPower(0);
-        RF.setPower(0);
+        FL.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+        FR.setPower(0);
 
-        LF.setDirection(DcMotor.Direction.REVERSE);
-        LB.setDirection(DcMotor.Direction.REVERSE);
-        RB.setDirection(DcMotor.Direction.FORWARD);
-        RF.setDirection(DcMotor.Direction.FORWARD);
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
 
     public void freeze()
     {
-        LF.setPower(0);
-        LB.setPower(0);
-        RB.setPower(0);
-        RF.setPower(0);
+        FL.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+        FR.setPower(0);
     }
     
 }

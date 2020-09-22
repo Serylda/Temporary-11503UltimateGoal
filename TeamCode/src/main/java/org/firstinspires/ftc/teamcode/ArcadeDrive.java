@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Testing", group="Arcade")
+@TeleOp(name="Arcade", group="Arcade")
 //@Disabled
-public class CustomArcadeDrive extends LinearOpMode {
+public class ArcadeDrive extends LinearOpMode {
 
     Mecanum mDrive = new Mecanum();
     
@@ -49,55 +49,46 @@ public class CustomArcadeDrive extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            if (gamepad1.dpad_up)
-            {
-                mDrive.FL.setPower(power);
-                mDrive.BL.setPower(power);
-                mDrive.BR.setPower(power);
-                mDrive.FR.setPower(power);
-            }
-            else if (gamepad1.dpad_down)
-            {
-                mDrive.FL.setPower(-power);
-                mDrive.BL.setPower(-power);
-                mDrive.BR.setPower(-power);
-                mDrive.FR.setPower(-power);
-            }
-            else if (gamepad1.dpad_left)
-            {
-                mDrive.FL.setPower(-power);
-                mDrive.BL.setPower(power);
-                mDrive.FR.setPower(power);
-                mDrive.BR.setPower(-power);
-            }
-            else if (gamepad1.dpad_right)
-            {
-                mDrive.FL.setPower(power);
-                mDrive.BL.setPower(-power);
-                mDrive.FR.setPower(-power);
-                mDrive.BR.setPower(power);
-            }
-            else if(gamepad1.left_bumper)
-            {
-                mDrive.FL.setPower(-power / 2);
-                mDrive.BL.setPower(-power / 2);
-                mDrive.FR.setPower(power / 2);
-                mDrive.BR.setPower(power / 2);
-            }
-            else if(gamepad1.right_bumper)
-            {
-                mDrive.FL.setPower(power / 2);
-                mDrive.BL.setPower(power / 2);
-                mDrive.FR.setPower(-power / 2);
-                mDrive.BR.setPower(-power / 2);
-            }
-            else
-            {
-                freeze();
-            }
-
+            doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         }
     }
+
+
+    public void doDrive(double x, double y, double t) {
+
+        double magnitude = Math.sqrt(x * x + y * y);
+        double distance = Math.atan2(y, x);
+        double turn = t;
+
+
+        //calculate power with angle and magnitude
+
+        double backLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
+        double backRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
+        double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
+        double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
+
+//in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order to strafe diagonally, wheels have to move at different speeds), we divide
+//them all by the highest value. This keeps them under 1, but in respect with each other
+
+        if (magnitude != 0) {
+            double divisor = 0;
+            divisor = Math.max(Math.abs(backLeft), Math.abs(backRight));
+            divisor = Math.max(divisor, Math.abs(frontLeft));
+            divisor = Math.max(divisor, Math.abs(frontRight));
+
+            backLeft = magnitude * (backLeft / divisor);
+            backRight = magnitude * (backRight / divisor);
+            frontLeft = magnitude * (frontLeft / divisor);
+            frontRight = magnitude * (frontRight / divisor);
+        }
+
+        mDrive.BL.setPower(backLeft);
+        mDrive.BR.setPower(backRight);
+        mDrive.FL.setPower(frontLeft);
+        mDrive.FR.setPower(frontRight);
+    }
+
 
     public void freeze()
     {
