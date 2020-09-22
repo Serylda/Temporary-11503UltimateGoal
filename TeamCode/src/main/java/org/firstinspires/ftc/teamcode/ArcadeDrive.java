@@ -63,8 +63,8 @@ public class ArcadeDrive extends LinearOpMode {
 
         //calculate power with angle and magnitude
 
-        double backLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
-        double backRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
+        double backLeft = magnitude * Math.sin(distance - Math.PI / 4) + turn;
+        double backRight = magnitude * Math.sin(distance + Math.PI / 4) - turn;
         double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
         double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
 
