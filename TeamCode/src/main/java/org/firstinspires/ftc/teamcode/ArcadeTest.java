@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Testing", group="Arcade")
+@TeleOp(name="Test", group="Arcade")
 //@Disabled
-public class CustomArcadeDrive extends LinearOpMode {
+public class ArcadeTest extends LinearOpMode {
 
     Mecanum mDrive = new Mecanum();
     
