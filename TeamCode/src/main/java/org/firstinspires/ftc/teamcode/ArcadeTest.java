@@ -52,6 +52,23 @@ public class ArcadeTest extends LinearOpMode {
             if (gamepad1.dpad_up)
             {
                 mDrive.FL.setPower(power);
+            }
+            else if (gamepad1.dpad_down)
+            {
+                mDrive.BL.setPower(-power);
+            }
+            else if (gamepad1.dpad_left)
+            {
+                mDrive.FR.setPower(power);
+            }
+            else if (gamepad1.dpad_right)
+            {
+                mDrive.BR.setPower(power);
+            }
+
+            /*if (gamepad1.dpad_up)
+            {
+                mDrive.FL.setPower(power);
                 mDrive.BL.setPower(power);
                 mDrive.BR.setPower(power);
                 mDrive.FR.setPower(power);
@@ -94,7 +111,7 @@ public class ArcadeTest extends LinearOpMode {
             else
             {
                 freeze();
-            }
+            }*/
 
         }
     }

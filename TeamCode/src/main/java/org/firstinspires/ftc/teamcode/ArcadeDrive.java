@@ -77,16 +77,25 @@ public class ArcadeDrive extends LinearOpMode {
             divisor = Math.max(divisor, Math.abs(frontLeft));
             divisor = Math.max(divisor, Math.abs(frontRight));
 
+            telemetry.addData("divisor: ", divisor);
+
             backLeft = magnitude * (backLeft / divisor);
             backRight = magnitude * (backRight / divisor);
             frontLeft = magnitude * (frontLeft / divisor);
             frontRight = magnitude * (frontRight / divisor);
         }
 
-        mDrive.BL.setPower(backLeft);
-        mDrive.BR.setPower(backRight);
-        mDrive.FL.setPower(frontLeft);
-        mDrive.FR.setPower(frontRight);
+        telemetry.addData("Magnitude: ", magnitude);
+        telemetry.addData("turn: ", turn);
+        telemetry.addData("backLeft: ", backLeft);
+        telemetry.addData("backRight: ", backRight);
+        telemetry.addData("frontLeft: ", frontLeft);
+        telemetry.addData("frontRight: ", frontRight);
+        telemetry.update();
+        mDrive.BL.setPower(backRight);
+        mDrive.BR.setPower(backLeft);
+        mDrive.FL.setPower(frontRight);
+        mDrive.FR.setPower(frontLeft);
     }
 
 
