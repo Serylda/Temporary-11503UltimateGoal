@@ -30,14 +30,14 @@ public class Vision {
     private static final boolean PHONE_IS_PORTRAIT = false;
     private static final String VUFORIA_KEY = "AcELeNr/////AAABmeg7NUNcDkPigDGNImdu5slLREdKn/q+qfajHBypycR0JUZYbfU0q2yZeSud79LJ2DS9uhr7Gu0xDM0DQZ36GRQDgMRwB8lf9TGZFQcoHq4kVAjAoEByEorXCzQ54ITCextAucpL2njKT/1IJxgREr6/axNEL2evyKSpOKoNOISKR6tkP6H3Ygd+FHm2tF/rsUCJHN5bTXrbRbwt5t65O7oJ6Wm8Foz1npbFI0bsD60cug4CpC/Ovovt2usxIRG8cpoQX49eA2jPRRLGXN8y1Nhh9Flr0poOkYoCExWo2iVunAGOwuCdB/rp/+2rkLBfWPvzQzrN9yBBP0JVJZ4biNQ41qqiuVvlc31O9xEvbKHt";
 
-    public static int skystonePosition = 0;
+    public static int xCutOff = 235;
 
-    private final int RED_THRESHOLD_LOW = 220;
-    private final int GREEN_THRESHOLD_LOW = 100;
-    private final int BLUE_THRESHOLD_LOW = 0;
-    private final int RED_THRESHOLD_HIGH = 255;
-    private final int GREEN_THRESHOLD_HIGH = 160;
-    private final int BLUE_THRESHOLD_HIGH = 40;
+    private final int RED_LOW = 140;
+    private final int GREEN_LOW = 100;
+    private final int BLUE_LOW = 0;
+    private final int RED_HIGH = 200;
+    private final int GREEN_HIGH = 160;
+    private final int BLUE_HIGH = 60;
 
     public static final double RED_DIVIDER_ONE = 150;
     public static final double RED_DIVIDER_TWO = 320;
@@ -53,7 +53,7 @@ public class Vision {
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         params.vuforiaLicenseKey = VUFORIA_KEY;
-        params.cameraName = opMode.hardwareMap.get(WebcamName.class, "vCard");
+        params.cameraName = opMode.hardwareMap.get(WebcamName.class, "Webcam");
         //params.cameraDirection = CameraDirection.DEFAULT;
         //params.cameraDirection = ;
         //Orientation
@@ -64,6 +64,83 @@ public class Vision {
         vuforia.setFrameQueueCapacity(4);
         vuforia.enableConvertFrameToBitmap();
 
+    }
+
+    public int ringCount(char side) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = getBitmap();
+        } catch (InterruptedException e) {
+            opMode.telemetry.addData("ERROR", "Flaming jesus with fiery fibroids");
+            opMode.telemetry.update();
+        }
+
+        int x;
+        if (side == 'b') //blue side
+        {
+            x = bitmap.getWidth() * 1000 / 1280;
+        }
+        else //red side
+        {
+            x = 120;
+        }
+
+        int highY = 0;
+        int lowY = 0;
+        for (int y = bitmap.getHeight() - 1; y > 320; y--)
+        {
+            int pixel = bitmap.getPixel(x, y);
+            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y-2)) && isOrange(bitmap.getPixel(x, y-4))
+                    && isOrange(bitmap.getPixel(x, y-6)) && isOrange(bitmap.getPixel(x, y-8)))
+            {
+                highY = y;
+                break;
+            }
+        }
+
+        if(highY == 0) //No orange found
+        {
+            return 0;
+        }
+
+        for (int y = highY - 200; y <=  highY-8; y++)
+        {
+            int pixel = bitmap.getPixel(x, y);
+            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y+2)) && isOrange(bitmap.getPixel(x, y+4))
+                    && isOrange(bitmap.getPixel(x, y+6)) && isOrange(bitmap.getPixel(x, y+8)))
+            {
+                lowY = y;
+                break;
+            }
+        }
+
+        int yRange = highY - lowY;
+
+
+        if (yRange < 40)
+        {
+            return 1;
+        }
+        else
+        {
+            return 4;
+        }
+
+        /*
+        for (int x = 0; x < xCutOff; x++) {
+            for (int y = 0; y < bitmap.getHeight() - 160; x++) {
+                int pixel = bitmap.getPixel(x, y);
+                if (red(pixel) >= YELRED_THRESHOLD && blue(pixel) <= YELBLUE_THRESHOLD && green(pixel) <= YELGREEN_THRESHOLD) {
+                    yellowYVals[y] = true;
+                    break;
+                }
+            }
+        }*/
+    }
+
+    public boolean isOrange(int pixel){
+        return (RED_LOW <= red(pixel) && red(pixel) <= RED_HIGH && GREEN_LOW <= green(pixel) &&
+                green(pixel) <= GREEN_HIGH && BLUE_LOW <= blue(pixel) && blue(pixel) <= BLUE_HIGH);
     }
 
     public Bitmap getBitmap() throws InterruptedException {
@@ -114,5 +191,10 @@ public class Vision {
         Bitmap bitmap = getBitmap();
         return bitmap.getWidth();
     }
+
+
 }
+
+
+
 

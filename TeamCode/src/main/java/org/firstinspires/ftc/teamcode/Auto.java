@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @SuppressWarnings("ALL")
-@Autonomous(name="Auto Template", group="auto")
+@Autonomous(name="Vision", group="auto")
 //@Disabled
-public class AutoTemplate extends LinearOpMode {
+public class Auto extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
 
+    int ringCount;
     //BNO055IMU imu;
 
 
@@ -36,12 +37,13 @@ public class AutoTemplate extends LinearOpMode {
         Vision vision = new Vision(this);
 
         while (!isStarted()) {
-
+            ringCount = vision.ringCount('b');
+            telemetry.addData("Ring Count: ", ringCount);
+            telemetry.update();
         }
 
         waitForStart();
         if (!isStopRequested()) {
-
         }
         mDrive.freeze();
     }
