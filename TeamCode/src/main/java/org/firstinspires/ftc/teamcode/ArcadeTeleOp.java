@@ -34,9 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="Arcade", group="Arcade")
 //@Disabled
-public class ArcadeDrive extends LinearOpMode {
+public class ArcadeTeleOp extends LinearOpMode {
 
-    Mecanum mDrive = new Mecanum();
+    DrivetrainHardware mDrive = new DrivetrainHardware();
     
     static final double power = 1;
 

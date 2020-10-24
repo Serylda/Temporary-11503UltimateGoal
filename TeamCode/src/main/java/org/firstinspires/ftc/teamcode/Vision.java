@@ -32,12 +32,12 @@ public class Vision {
 
     public static int skystonePosition = 0;
 
-    private final int RED_THRESHOLD = 35;
-    private final int GREEN_THRESHOLD = 35;
-    private final int BLUE_THRESHOLD = 35;
-    private final int YELRED_THRESHOLD = 160;
-    private final int YELGREEN_THRESHOLD = 130;
-    private final int YELBLUE_THRESHOLD = 30;
+    private final int RED_THRESHOLD_LOW = 220;
+    private final int GREEN_THRESHOLD_LOW = 100;
+    private final int BLUE_THRESHOLD_LOW = 0;
+    private final int RED_THRESHOLD_HIGH = 255;
+    private final int GREEN_THRESHOLD_HIGH = 160;
+    private final int BLUE_THRESHOLD_HIGH = 40;
 
     public static final double RED_DIVIDER_ONE = 150;
     public static final double RED_DIVIDER_TWO = 320;

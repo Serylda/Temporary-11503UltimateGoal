@@ -27,17 +27,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //John was here
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.DrivetrainHardware;
+
 @TeleOp(name="Tank", group="Tank")
 @Disabled
 public class BasicTankDrive extends LinearOpMode {
     
-    Mecanum mDrive = new Mecanum();
+    DrivetrainHardware mDrive = new DrivetrainHardware();
 
     @Override
     public void runOpMode() 
