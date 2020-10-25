@@ -50,15 +50,12 @@ public class Auto extends LinearOpMode {
 }
 
 
-
     /*
     public double sigmoid(double error, double ceiling, double floor, double half, double stiff) {
         return floor + (ceiling - floor) / (1 + Math.pow(Math.E, stiff * (half - error)));
     }*/
 
-
-
-    /*public void pidLinearMovement(double distance, double timeframe)
+    /*public void templatePIDLinearMovement(double distance, double timeframe)
     {
         double conversionIndex = 537.6/((26.0/20.0)*90.0* Math.PI / 25.4); // Ticks per inch
         double timeFrame = timeframe; //distance * distanceTimeIndex;

@@ -37,8 +37,8 @@ public class DrivetrainHardware {
         BL = hardwareMap.get(DcMotor.class, "LM1");
         BR = hardwareMap.get(DcMotor.class, "RM2");
         FR = hardwareMap.get(DcMotor.class, "RM3");
-        //FlyWheel1 = hardwareMap.get(DcMotor.class, "FlyWheel1");
-        //FlyWheel2 = hardwareMap.get(DcMotor.class, "FlyWheel2");
+        FlyWheel1 = hardwareMap.get(DcMotor.class, "FW1");
+        FlyWheel2 = hardwareMap.get(DcMotor.class, "FW2");
         //Arm = hardwareMap.get(DcMotor.class, "Arm");
         //Intake = hardwareMap.get(DcMotor.class, "Intake");
 
@@ -48,8 +48,8 @@ public class DrivetrainHardware {
         BL.setDirection(DcMotor.Direction.FORWARD);
         BR.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
-        //FlyWheel1.setDirection(DcMotor.Direction.FORWARD);
-        //FlyWheel2.setDirection(DcMotor.Direction.FORWARD);
+        FlyWheel1.setDirection(DcMotor.Direction.FORWARD);
+        FlyWheel2.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
@@ -60,8 +60,8 @@ public class DrivetrainHardware {
         BL.setPower(0);
         BR.setPower(0);
         FR.setPower(0);
-        //FlyWheel1.setPower(0);
-        //FlyWheel2.setPower(0);
+        FlyWheel1.setPower(0);
+        FlyWheel2.setPower(0);
         //Arm.setPower(0);
         //Intake.setPower(0);
     }

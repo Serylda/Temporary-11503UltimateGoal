@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Arcade", group="Arcade")
+@TeleOp(name="shooter test", group="Arcade")
 //@Disabled
-public class ArcadeTeleOp extends LinearOpMode {
+public class ShooterTest extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
     
@@ -49,17 +49,21 @@ public class ArcadeTeleOp extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-
-            if (gamepad1.right_trigger > 0.3)
+            //doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            if (gamepad1.left_bumper)
             {
-                mDrive.FlyWheel1.setPower(-gamepad1.right_trigger);
-                mDrive.FlyWheel2.setPower(-gamepad1.right_trigger);
+                mDrive.FL.setPower(1);
+                mDrive.BL.setPower(1);
+            }
+            else if (gamepad1.right_bumper)
+            {
+                mDrive.FL.setPower(-1);
+                mDrive.BL.setPower(-1);
             }
             else
             {
-                mDrive.FlyWheel1.setPower(0);
-                mDrive.FlyWheel2.setPower(0);
+                mDrive.FL.setPower(0);
+                mDrive.BL.setPower(0);
             }
         }
     }
@@ -79,9 +83,8 @@ public class ArcadeTeleOp extends LinearOpMode {
         double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
         double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
 
-        /*in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order
-        to strafe diagonally, wheels have to move at different speeds), we divide them all by the
-        highest value. This keeps them under 1, but in respect with each other*/
+//in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order to strafe diagonally, wheels have to move at different speeds), we divide
+//them all by the highest value. This keeps them under 1, but in respect with each other
 
         if (magnitude != 0) {
             double divisor = 0;
@@ -96,7 +99,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             frontLeft = magnitude * (frontLeft / divisor);
             frontRight = magnitude * (frontRight / divisor);
         }
-        /*
+
         telemetry.addData("Magnitude: ", magnitude);
         telemetry.addData("turn: ", turn);
         telemetry.addData("backLeft: ", backLeft);
@@ -104,8 +107,6 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.addData("frontLeft: ", frontLeft);
         telemetry.addData("frontRight: ", frontRight);
         telemetry.update();
-        */
-
         mDrive.BL.setPower(backRight);
         mDrive.BR.setPower(backLeft);
         mDrive.FL.setPower(frontRight);

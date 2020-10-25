@@ -30,7 +30,6 @@ public class Vision {
     private static final boolean PHONE_IS_PORTRAIT = false;
     private static final String VUFORIA_KEY = "AcELeNr/////AAABmeg7NUNcDkPigDGNImdu5slLREdKn/q+qfajHBypycR0JUZYbfU0q2yZeSud79LJ2DS9uhr7Gu0xDM0DQZ36GRQDgMRwB8lf9TGZFQcoHq4kVAjAoEByEorXCzQ54ITCextAucpL2njKT/1IJxgREr6/axNEL2evyKSpOKoNOISKR6tkP6H3Ygd+FHm2tF/rsUCJHN5bTXrbRbwt5t65O7oJ6Wm8Foz1npbFI0bsD60cug4CpC/Ovovt2usxIRG8cpoQX49eA2jPRRLGXN8y1Nhh9Flr0poOkYoCExWo2iVunAGOwuCdB/rp/+2rkLBfWPvzQzrN9yBBP0JVJZ4biNQ41qqiuVvlc31O9xEvbKHt";
 
-    public static int xCutOff = 235;
 
     private final int RED_LOW = 140;
     private final int GREEN_LOW = 100;
@@ -38,11 +37,6 @@ public class Vision {
     private final int RED_HIGH = 200;
     private final int GREEN_HIGH = 160;
     private final int BLUE_HIGH = 60;
-
-    public static final double RED_DIVIDER_ONE = 150;
-    public static final double RED_DIVIDER_TWO = 320;
-    public static final double BLUE_DIVIDER_ONE = 260;
-    public static final double BLUE_DIVIDER_TWO = 445;
 
     public Vision(LinearOpMode opMode) {
 
@@ -126,16 +120,6 @@ public class Vision {
             return 4;
         }
 
-        /*
-        for (int x = 0; x < xCutOff; x++) {
-            for (int y = 0; y < bitmap.getHeight() - 160; x++) {
-                int pixel = bitmap.getPixel(x, y);
-                if (red(pixel) >= YELRED_THRESHOLD && blue(pixel) <= YELBLUE_THRESHOLD && green(pixel) <= YELGREEN_THRESHOLD) {
-                    yellowYVals[y] = true;
-                    break;
-                }
-            }
-        }*/
     }
 
     public boolean isOrange(int pixel){
@@ -180,16 +164,6 @@ public class Vision {
 
 
         return imageBitmap;
-    }
-
-    public double getImageHeight() throws InterruptedException {
-        Bitmap bitmap = getBitmap();
-        return bitmap.getHeight();
-    }
-
-    public double getImageWidth() throws InterruptedException {
-        Bitmap bitmap = getBitmap();
-        return bitmap.getWidth();
     }
 
 
