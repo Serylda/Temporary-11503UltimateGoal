@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Arcade", group="Arcade")
+@TeleOp(name="Drivetrain Debugger", group="Arcade")
 //@Disabled
-public class ArcadeTeleOp extends LinearOpMode {
+public class DrivetrainDebugger extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
     
@@ -49,17 +49,35 @@ public class ArcadeTeleOp extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            trigger(gamepad2.left_trigger);
-            intake();
-            pivot();
-            servos();
+            //doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            if (gamepad1.dpad_left)
+            {
+                mDrive.BL.setPower(1);
+            }
+            else if (gamepad1.dpad_right)
+            {
+                mDrive.BR.setPower(1);
+            }
+            else if (gamepad1.dpad_up)
+            {
+                mDrive.FL.setPower(1);
+            }
+            else if (gamepad1.dpad_down)
+            {
+                mDrive.FR.setPower(1);
+            }
+            else
+            {
+                mDrive.BL.setPower(0);
+                mDrive.BR.setPower(0);
+                mDrive.FR.setPower(0);
+                mDrive.FL.setPower(0);
+            }
         }
     }
 
 
-    public void drive(double x, double y, double t)
-    {
+    public void doDrive(double x, double y, double t) {
 
         double magnitude = Math.sqrt(x * x + y * y);
         double distance = Math.atan2(y, x);
@@ -73,9 +91,8 @@ public class ArcadeTeleOp extends LinearOpMode {
         double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
         double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
 
-        /*in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order
-        to strafe diagonally, wheels have to move at different speeds), we divide them all by the
-        highest value. This keeps them under 1, but in respect with each other*/
+//in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order to strafe diagonally, wheels have to move at different speeds), we divide
+//them all by the highest value. This keeps them under 1, but in respect with each other
 
         if (magnitude != 0) {
             double divisor = 0;
@@ -90,7 +107,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             frontLeft = magnitude * (frontLeft / divisor);
             frontRight = magnitude * (frontRight / divisor);
         }
-        /*
+
         telemetry.addData("Magnitude: ", magnitude);
         telemetry.addData("turn: ", turn);
         telemetry.addData("backLeft: ", backLeft);
@@ -98,78 +115,10 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.addData("frontLeft: ", frontLeft);
         telemetry.addData("frontRight: ", frontRight);
         telemetry.update();
-        */
-
-        mDrive.BL.setPower(backLeft);
-        mDrive.BR.setPower(backRight);
-        mDrive.FL.setPower(frontLeft);
-        mDrive.FR.setPower(frontRight);
+        mDrive.BL.setPower(backRight);
+        mDrive.BR.setPower(backLeft);
+        mDrive.FL.setPower(frontRight);
+        mDrive.FR.setPower(frontLeft);
     }
 
-    public void trigger(double t)
-    {
-        mDrive.FlyWheel1.setPower(t);
-        mDrive.FlyWheel2.setPower(t);
-    }
-
-    public void intake()
-    {
-        if(gamepad2.left_bumper)
-        {
-            mDrive.Intake.setPower(1);
-        }
-        else if (gamepad2.right_bumper)
-        {
-            mDrive.Intake.setPower(-1);
-        }
-        else
-        {
-            mDrive.Intake.setPower(0);
-        }
-    }
-
-    public void pivot()
-    {
-        if(gamepad2.dpad_left)
-        {
-            mDrive.Pivot.setPower(0.5);
-        }
-        else if (gamepad2.dpad_right)
-        {
-            mDrive.Pivot.setPower(-0.5);
-        }
-        else
-        {
-            mDrive.Intake.setPower(0);
-        }
-    }
-
-    public void servos()
-    {
-        if (gamepad2.dpad_up)
-        {
-            mDrive.ringHopper.setPosition(1);
-        }
-        else if (gamepad2.dpad_down)
-        {
-            mDrive.ringHopper.setPosition(0);
-        }
-        else
-        {
-            mDrive.ringHopper.setPosition(0.5);
-        }
-
-        if (gamepad2.left_stick_y >= 0.3)
-        {
-            mDrive.arm.setPosition(1);
-        }
-        else if (gamepad2.left_stick_y <= -0.3)
-        {
-            mDrive.arm.setPosition(0);
-        }
-        else
-        {
-            mDrive.arm.setPosition(0.5);
-        }
-    }
 }

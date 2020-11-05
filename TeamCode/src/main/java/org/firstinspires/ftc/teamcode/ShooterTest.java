@@ -50,20 +50,18 @@ public class ShooterTest extends LinearOpMode {
         while (opModeIsActive())
         {
             //doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad1.left_bumper)
+            if (gamepad1.dpad_left)
             {
-                mDrive.FL.setPower(1);
-                mDrive.BL.setPower(1);
+                mDrive.Intake.setPower(0.2);
             }
-            else if (gamepad1.right_bumper)
+            else if (gamepad1.dpad_right)
             {
-                mDrive.FL.setPower(-1);
-                mDrive.BL.setPower(-1);
+                mDrive.Pivot.setPower(0.2);
             }
             else
             {
-                mDrive.FL.setPower(0);
-                mDrive.BL.setPower(0);
+                mDrive.Pivot.setPower(0);
+                mDrive.Intake.setPower(0);
             }
         }
     }
@@ -113,12 +111,4 @@ public class ShooterTest extends LinearOpMode {
         mDrive.FR.setPower(frontLeft);
     }
 
-
-    public void freeze()
-    {
-        mDrive.FL.setPower(0);
-        mDrive.BL.setPower(0);
-        mDrive.BR.setPower(0);
-        mDrive.FR.setPower(0);
-    }
 }
