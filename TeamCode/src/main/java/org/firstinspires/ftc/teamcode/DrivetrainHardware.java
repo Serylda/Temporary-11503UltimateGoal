@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.rev.RevSPARKMini;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +18,10 @@ public class DrivetrainHardware {
     public DcMotor Intake; //Motor 3
 
     public Servo ringHopper, arm, claw;
-    
+
+    public RevBlinkinLedDriver blink;
+    //public RevBlinkinLedDriver blink;
+
     HardwareMap hardwareMap;
     
     public DrivetrainHardware()
@@ -33,6 +38,7 @@ public class DrivetrainHardware {
         ringHopper = null;
         arm = null;
         claw = null;
+        blink = null;
     }
     
     public void init(HardwareMap h)
@@ -50,7 +56,13 @@ public class DrivetrainHardware {
 
         ringHopper = hardwareMap.get(Servo.class, "hopper"); //1
         arm = hardwareMap.get(Servo.class, "arm"); //0
-        //claw = hardwareMap.get(Servo.class, "claw");
+        claw = hardwareMap.get(Servo.class, "claw");
+
+
+        //blink = hardwareMap.get(RevSPARKMini.class, "blink");
+        blink = hardwareMap.get(RevBlinkinLedDriver.class, "blink");
+        blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED_ORANGE);
+        //blink.;
 
         freeze();
 
@@ -60,8 +72,9 @@ public class DrivetrainHardware {
         FR.setDirection(DcMotor.Direction.REVERSE);
         FlyWheel1.setDirection(DcMotor.Direction.REVERSE);
         FlyWheel2.setDirection(DcMotor.Direction.REVERSE);
-        Pivot.setDirection(DcMotor.Direction.REVERSE);
+        Pivot.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
+
 
     }
 

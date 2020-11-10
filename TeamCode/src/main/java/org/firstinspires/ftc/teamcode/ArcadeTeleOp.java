@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -50,7 +51,7 @@ public class ArcadeTeleOp extends LinearOpMode {
         while (opModeIsActive())
         {
             drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            trigger(gamepad2.left_trigger);
+            trigger();
             intake();
             pivot();
             servos();
@@ -100,28 +101,24 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.update();
         */
 
-        mDrive.BL.setPower(backLeft);
-        mDrive.BR.setPower(backRight);
-        mDrive.FL.setPower(frontLeft);
-        mDrive.FR.setPower(frontRight);
+        mDrive.BL.setPower(backRight);
+        mDrive.BR.setPower(backLeft);
+        mDrive.FL.setPower(frontRight);
+        mDrive.FR.setPower(frontLeft);
     }
 
-    public void trigger(double t)
+    public void trigger()
     {
-        mDrive.FlyWheel1.setPower(t);
-        mDrive.FlyWheel2.setPower(t);
+        mDrive.FlyWheel1.setPower(gamepad2.left_trigger);
+        mDrive.FlyWheel2.setPower(gamepad2.left_trigger);
     }
 
     public void intake()
     {
-        if(gamepad2.left_bumper)
-        {
-            mDrive.Intake.setPower(1);
-        }
-        else if (gamepad2.right_bumper)
-        {
-            mDrive.Intake.setPower(-1);
-        }
+        if (gamepad1.left_trigger > 0.2)
+            mDrive.Intake.setPower(gamepad1.left_trigger);
+        else if (gamepad1.right_trigger > 0.2)
+            mDrive.Intake.setPower(-gamepad1.right_trigger);
         else
         {
             mDrive.Intake.setPower(0);
@@ -130,7 +127,8 @@ public class ArcadeTeleOp extends LinearOpMode {
 
     public void pivot()
     {
-        if(gamepad2.dpad_left)
+        mDrive.Pivot.setPower(gamepad2.left_stick_y / 2);
+        /*8if(gamepad2.dpad_left)
         {
             mDrive.Pivot.setPower(0.5);
         }
@@ -140,36 +138,32 @@ public class ArcadeTeleOp extends LinearOpMode {
         }
         else
         {
-            mDrive.Intake.setPower(0);
-        }
+            mDrive.Pivot.setPower(0);
+        }*/
     }
 
     public void servos()
     {
         if (gamepad2.dpad_up)
-        {
             mDrive.ringHopper.setPosition(1);
-        }
         else if (gamepad2.dpad_down)
-        {
             mDrive.ringHopper.setPosition(0);
-        }
         else
-        {
             mDrive.ringHopper.setPosition(0.5);
-        }
 
-        if (gamepad2.left_stick_y >= 0.3)
-        {
+        if (gamepad2.right_stick_y >= 0.2)
             mDrive.arm.setPosition(1);
-        }
-        else if (gamepad2.left_stick_y <= -0.3)
-        {
+        else if (gamepad2.right_stick_y <= -0.2)
             mDrive.arm.setPosition(0);
-        }
         else
-        {
             mDrive.arm.setPosition(0.5);
-        }
+
+        if(gamepad2.a)
+            mDrive.claw.setPosition(1);
+        else if (gamepad2.b)
+            mDrive.claw.setPosition(0);
+
+        //if(gamepad1.a)
+            //mDrive.blink.setPosition(0.57);
     }
 }
