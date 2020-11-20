@@ -33,41 +33,34 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Arcade", group="Arcade")
+@TeleOp(name="LED test", group="Arcade")
 //@Disabled
-public class ArcadeTeleOp extends LinearOpMode {
+public class LEDTest extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
-
-    static int currentState;
-    static final int IDLE = 0;
-    static final int MANEUVERING = 1;
-    static final int SHOOTING = 2;
-    static final int COLLECTING = 3;
+    
+    static final double power = 1;
 
     @Override
     public void runOpMode()
     {
 
         mDrive.init(hardwareMap);
-        currentState = IDLE;
         waitForStart();
 
         while (opModeIsActive())
         {
-            currentState = IDLE;
-            drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            runIntake();
-            runFlyWheel();
-            runPivot();
-            runServos();
-            runRGBPatternSwitch();
+            if (gamepad1.dpad_left)
+                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
+            else if (gamepad1.dpad_right)
+                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+            else if (gamepad1.dpad_up)
+                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
         }
     }
 
 
-    public void drive(double x, double y, double t)
-    {
+    public void doDrive(double x, double y, double t) {
 
         double magnitude = Math.sqrt(x * x + y * y);
         double distance = Math.atan2(y, x);
@@ -81,9 +74,8 @@ public class ArcadeTeleOp extends LinearOpMode {
         double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
         double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
 
-        /*in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order
-        to strafe diagonally, wheels have to move at different speeds), we divide them all by the
-        highest value. This keeps them under 1, but in respect with each other*/
+//in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order to strafe diagonally, wheels have to move at different speeds), we divide
+//them all by the highest value. This keeps them under 1, but in respect with each other
 
         if (magnitude != 0) {
             double divisor = 0;
@@ -98,7 +90,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             frontLeft = magnitude * (frontLeft / divisor);
             frontRight = magnitude * (frontRight / divisor);
         }
-        /*
+
         telemetry.addData("Magnitude: ", magnitude);
         telemetry.addData("turn: ", turn);
         telemetry.addData("backLeft: ", backLeft);
@@ -106,86 +98,10 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.addData("frontLeft: ", frontLeft);
         telemetry.addData("frontRight: ", frontRight);
         telemetry.update();
-        */
-
         mDrive.BL.setPower(backRight);
         mDrive.BR.setPower(backLeft);
         mDrive.FL.setPower(frontRight);
         mDrive.FR.setPower(frontLeft);
-
-        currentState = MANEUVERING;
     }
 
-    public void runFlyWheel()
-    {
-        mDrive.FlyWheel1.setPower(gamepad2.left_trigger);
-        mDrive.FlyWheel2.setPower(gamepad2.left_trigger);
-
-        if(gamepad2.left_trigger >= 0.2)
-            currentState = SHOOTING;
-    }
-
-    public void runIntake()
-    {
-        if (gamepad1.left_trigger > 0.2)
-        {
-            mDrive.Intake.setPower(gamepad1.left_trigger);
-            currentState = COLLECTING;
-        }
-        else if (gamepad1.right_trigger > 0.2)
-        {
-            mDrive.Intake.setPower(-gamepad1.right_trigger);
-            currentState = COLLECTING;
-        }
-        else
-        {
-            mDrive.Intake.setPower(0);
-        }
-    }
-
-    public void runPivot()
-    {
-        mDrive.Pivot.setPower(gamepad2.left_stick_y / 2);
-    }
-
-    public void runServos()
-    {
-        if (gamepad2.dpad_up)
-            mDrive.ringHopper.setPosition(1);
-        else if (gamepad2.dpad_down)
-            mDrive.ringHopper.setPosition(0);
-        else
-            mDrive.ringHopper.setPosition(0.5);
-
-        if (gamepad2.right_stick_y >= 0.2)
-            mDrive.arm.setPosition(1);
-        else if (gamepad2.right_stick_y <= -0.2)
-            mDrive.arm.setPosition(0);
-        else
-            mDrive.arm.setPosition(0.5);
-
-        if(gamepad2.x)
-            mDrive.claw.setPosition(1);
-        else if (gamepad2.y)
-            mDrive.claw.setPosition(0);
-    }
-
-    public void runRGBPatternSwitch()
-    {
-        telemetry.addData("state: ", currentState);
-        telemetry.update();
-        switch (currentState)
-        {
-            case IDLE:
-                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE);
-            case MANEUVERING:
-                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
-            case COLLECTING:
-                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
-            case SHOOTING:
-                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
-            default:
-                mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
-        }
-    }
 }

@@ -61,7 +61,7 @@ public class DrivetrainHardware {
 
         //blink = hardwareMap.get(RevSPARKMini.class, "blink");
         blink = hardwareMap.get(RevBlinkinLedDriver.class, "blink");
-        blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED_ORANGE);
+        blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE);
         //blink.;
 
         freeze();
@@ -74,7 +74,6 @@ public class DrivetrainHardware {
         FlyWheel2.setDirection(DcMotor.Direction.REVERSE);
         Pivot.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
-
 
     }
 

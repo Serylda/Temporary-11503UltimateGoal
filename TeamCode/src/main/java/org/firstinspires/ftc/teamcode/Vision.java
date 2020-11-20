@@ -76,23 +76,23 @@ public class Vision {
         }
         else //red side
         {
-            x = 120;
+            x = 420;
         }
 
-        int highY = 0;
+        int highY = 8964;
         int lowY = 0;
-        for (int y = bitmap.getHeight() - 1; y > 320; y--)
+        for (int y = bitmap.getHeight() - 1; y > 490; y--)
         {
             int pixel = bitmap.getPixel(x, y);
-            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y-2)) && isOrange(bitmap.getPixel(x, y-4))
-                    && isOrange(bitmap.getPixel(x, y-6)) && isOrange(bitmap.getPixel(x, y-8)))
+            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y-2))) //&& isOrange(bitmap.getPixel(x, y-4))
+                    //&& isOrange(bitmap.getPixel(x, y-6)) && isOrange(bitmap.getPixel(x, y-8)))
             {
                 highY = y;
                 break;
             }
         }
 
-        if(highY == 0) //No orange found
+        if(highY == 8964) //No orange found
         {
             return 0;
         }

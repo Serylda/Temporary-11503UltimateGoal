@@ -37,7 +37,7 @@ public class Auto extends LinearOpMode {
         Vision vision = new Vision(this);
 
         while (!isStarted()) {
-            ringCount = vision.ringCount('b');
+            ringCount = vision.ringCount('r');
             telemetry.addData("Ring Count: ", ringCount);
             telemetry.update();
         }
