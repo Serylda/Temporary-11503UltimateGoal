@@ -61,6 +61,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             runFlyWheel();
             runPivot();
             runServos();
+            doArm();
             runRGBPatternSwitch();
         }
     }
@@ -125,22 +126,29 @@ public class ArcadeTeleOp extends LinearOpMode {
             currentState = SHOOTING;
     }
 
-    public void runIntake()
+    public void runIntake() {
+        if (gamepad1.left_trigger > 0.2) {
+            mDrive.intake1.setPower(1);
+            mDrive.intake2.setPower(0);
+            currentState = COLLECTING;
+        } else if (gamepad1.right_trigger > 0.2) {
+            mDrive.intake2.setPower(1);
+            mDrive.intake1.setPower(0);
+            currentState = COLLECTING;
+        } else {
+            mDrive.intake1.setPower(0.5);
+            mDrive.intake2.setPower(0.5);
+        }
+    }
+
+    public void doArm()
     {
-        if (gamepad1.left_trigger > 0.2)
-        {
-            mDrive.Intake.setPower(gamepad1.left_trigger);
-            currentState = COLLECTING;
-        }
-        else if (gamepad1.right_trigger > 0.2)
-        {
-            mDrive.Intake.setPower(-gamepad1.right_trigger);
-            currentState = COLLECTING;
-        }
+        if (gamepad2.right_stick_y >= 0.2)
+            mDrive.Arm.setPower(1);
         else
-        {
-            mDrive.Intake.setPower(0);
-        }
+            mDrive.Arm.setPower(0);
+
+
     }
 
     public void runPivot()
@@ -156,13 +164,6 @@ public class ArcadeTeleOp extends LinearOpMode {
             mDrive.ringHopper.setPosition(0);
         else
             mDrive.ringHopper.setPosition(0.5);
-
-        if (gamepad2.right_stick_y >= 0.2)
-            mDrive.arm.setPosition(1);
-        else if (gamepad2.right_stick_y <= -0.2)
-            mDrive.arm.setPosition(0);
-        else
-            mDrive.arm.setPosition(0.5);
 
         if(gamepad2.x)
             mDrive.claw.setPosition(1);

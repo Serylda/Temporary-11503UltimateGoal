@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevSPARKMini;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 public class DrivetrainHardware {
     
@@ -15,9 +16,10 @@ public class DrivetrainHardware {
     public DcMotor Pivot; //Motor 0
     public DcMotor FlyWheel1; //Motor 1
     public DcMotor FlyWheel2; //Motor 2
-    public DcMotor Intake; //Motor 3
+    public DcMotor Arm; //Motor 3
 
-    public Servo ringHopper, arm, claw;
+    public Servo ringHopper, claw;
+    public CRServo intake1, intake2;
 
     public RevBlinkinLedDriver blink;
     //public RevBlinkinLedDriver blink;
@@ -33,10 +35,11 @@ public class DrivetrainHardware {
         FlyWheel1 = null;
         FlyWheel2 = null;
         Pivot = null;
-        Intake = null;
+        intake1 = null;
+        intake2 = null;
         hardwareMap = null;
         ringHopper = null;
-        arm = null;
+        Arm = null;
         claw = null;
         blink = null;
     }
@@ -52,11 +55,12 @@ public class DrivetrainHardware {
         FlyWheel1 = hardwareMap.get(DcMotor.class, "FW1");
         FlyWheel2 = hardwareMap.get(DcMotor.class, "FW2");
         Pivot = hardwareMap.get(DcMotor.class, "Pivot");
-        Intake = hardwareMap.get(DcMotor.class, "Intake");
+        Arm = hardwareMap.get(DcMotor.class, "Arm");
 
         ringHopper = hardwareMap.get(Servo.class, "hopper"); //1
-        arm = hardwareMap.get(Servo.class, "arm"); //0
         claw = hardwareMap.get(Servo.class, "claw");
+        intake1 = hardwareMap.get(CRServo.class, "intake1");
+        intake2 = hardwareMap.get(CRServo.class, "intake2");
 
 
         //blink = hardwareMap.get(RevSPARKMini.class, "blink");
@@ -73,7 +77,7 @@ public class DrivetrainHardware {
         FlyWheel1.setDirection(DcMotor.Direction.REVERSE);
         FlyWheel2.setDirection(DcMotor.Direction.REVERSE);
         Pivot.setDirection(DcMotor.Direction.FORWARD);
-        Intake.setDirection(DcMotor.Direction.FORWARD);
+        Arm.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
@@ -87,7 +91,7 @@ public class DrivetrainHardware {
         FlyWheel1.setPower(0);
         FlyWheel2.setPower(0);
         Pivot.setPower(0);
-        Intake.setPower(0);
+        Arm.setPower(0);
     }
     
 }
