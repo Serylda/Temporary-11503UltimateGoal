@@ -129,19 +129,19 @@ public class ArcadeTeleOp extends LinearOpMode {
     public void runIntake() {
         if (gamepad1.left_trigger > 0.2) {
             mDrive.intake1.setPower(1);
-            mDrive.intake2.setPower(0);
+            mDrive.intake2.setPower(-1);
             currentState = COLLECTING;
         } else if (gamepad1.right_trigger > 0.2) {
             mDrive.intake2.setPower(1);
-            mDrive.intake1.setPower(0);
+            mDrive.intake1.setPower(-1);
             currentState = COLLECTING;
         } else {
-            mDrive.intake1.setPower(0.5);
-            mDrive.intake2.setPower(0.5);
+            mDrive.intake1.setPower(0);
+            mDrive.intake2.setPower(0);
         }
     }
 
-    public void doArm()    
+    public void doArm()
     {
         mDrive.Arm.setPower(gamepad2.right_stick_y / 2);
     }
