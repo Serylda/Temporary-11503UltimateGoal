@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class DrivetrainHardware {
     
@@ -22,7 +23,8 @@ public class DrivetrainHardware {
     public CRServo intake1, intake2;
 
     public RevBlinkinLedDriver blink;
-    //public RevBlinkinLedDriver blink;
+
+    //public VoltageSensor voltageSensor;
 
     HardwareMap hardwareMap;
     
@@ -62,12 +64,10 @@ public class DrivetrainHardware {
         intake1 = hardwareMap.get(CRServo.class, "intake1");
         intake2 = hardwareMap.get(CRServo.class, "intake2");
 
-
         //blink = hardwareMap.get(RevSPARKMini.class, "blink");
         blink = hardwareMap.get(RevBlinkinLedDriver.class, "blink");
-        blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE);
+        blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE);
         //blink.;
-
         freeze();
 
         FL.setDirection(DcMotor.Direction.FORWARD);
@@ -93,5 +93,17 @@ public class DrivetrainHardware {
         Pivot.setPower(0);
         Arm.setPower(0);
     }
-    
+
+    public double getVoltage()
+    {
+        double result = Double.POSITIVE_INFINITY;
+        for (VoltageSensor sensor : hardwareMap.voltageSensor) {
+            double voltage = sensor.getVoltage();
+            if (voltage > 0) {
+                result = Math.min(result, voltage);
+            }
+        }
+        return result;
+    }
+
 }

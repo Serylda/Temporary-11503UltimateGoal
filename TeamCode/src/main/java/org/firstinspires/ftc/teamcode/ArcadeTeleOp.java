@@ -62,7 +62,8 @@ public class ArcadeTeleOp extends LinearOpMode {
             runPivot();
             runServos();
             doArm();
-            runRGBPatternSwitch();
+            runVoltageLED();
+            //runRGBPatternSwitch();
         }
     }
 
@@ -169,7 +170,7 @@ public class ArcadeTeleOp extends LinearOpMode {
 
     public void runRGBPatternSwitch()
     {
-        telemetry.addData("state: ", currentState);
+        /*telemetry.addData("state: ", currentState);
         telemetry.update();
         switch (currentState)
         {
@@ -183,6 +184,24 @@ public class ArcadeTeleOp extends LinearOpMode {
                 mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
             default:
                 mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
-        }
+        }*/
+
+    }
+
+    public void runVoltageLED()
+    {
+        double voltage = mDrive.getVoltage();
+
+        telemetry.addData("Voltage: ", voltage);
+        telemetry.update();
+
+        if (voltage > 14)
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE);
+        else if (voltage > 13)
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
+        else if (voltage > 12)
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
+        else
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
     }
 }
