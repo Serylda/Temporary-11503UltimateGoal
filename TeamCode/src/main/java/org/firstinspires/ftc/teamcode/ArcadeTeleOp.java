@@ -144,13 +144,16 @@ public class ArcadeTeleOp extends LinearOpMode {
 
     public void doArm()
     {
-        mDrive.Arm.setPower(gamepad2.right_stick_y / 2);
+         if (gamepad2.right_stick_button)
+             mDrive.Arm.setPower(gamepad2.right_stick_y);
+         else
+             mDrive.Arm.setPower(gamepad2.right_stick_y / 2);
     }
 
     public void runPivot()
 
     {
-        mDrive.Pivot.setPower(gamepad2.left_stick_y / 2);
+        mDrive.Pivot.setPower(3 * gamepad2.left_stick_y / 4);
     }
 
     public void runServos()
