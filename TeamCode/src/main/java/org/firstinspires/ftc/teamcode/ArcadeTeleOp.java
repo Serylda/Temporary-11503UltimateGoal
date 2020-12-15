@@ -198,11 +198,11 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.addData("Voltage: ", voltage);
         telemetry.update();
 
-        if (voltage > 14)
-            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE);
-        else if (voltage > 13)
-            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_GOLD);
+        if (voltage > 13)
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
         else if (voltage > 12)
+            mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        else if (voltage > 11)
             mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
         else
             mDrive.blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
