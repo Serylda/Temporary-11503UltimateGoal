@@ -52,7 +52,7 @@ public class ShooterTest extends LinearOpMode {
             //doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             if (gamepad1.dpad_left)
             {
-                mDrive.Intake.setPower(0.2);
+             //   mDrive.Intake.setPower(0.2);
             }
             else if (gamepad1.dpad_right)
             {
@@ -61,7 +61,7 @@ public class ShooterTest extends LinearOpMode {
             else
             {
                 mDrive.Pivot.setPower(0);
-                mDrive.Intake.setPower(0);
+              //  mDrive.Intake.setPower(0);
             }
         }
     }
