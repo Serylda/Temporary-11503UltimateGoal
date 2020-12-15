@@ -106,4 +106,47 @@ public class DrivetrainHardware {
         return result;
     }
 
+    public void resetEncoders()
+    {
+        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public double getEncoderAvg() {
+        double output = 0;
+        int encoderCount = 0;
+        boolean[] encoderIsNotPluggedIn = new boolean[4];
+
+        if (Math.abs(BR.getCurrentPosition()) != 0) {
+            encoderCount++;
+            output += Math.abs(BR.getCurrentPosition());
+        } else encoderIsNotPluggedIn[0] = true;
+
+        if (Math.abs(FR.getCurrentPosition()) != 0) {
+            encoderCount++;
+            output += Math.abs(FR.getCurrentPosition());
+        } else encoderIsNotPluggedIn[1] = true;
+
+        if (Math.abs(FL.getCurrentPosition()) != 0) {
+            encoderCount++;
+            output += Math.abs(FL.getCurrentPosition());
+        } else encoderIsNotPluggedIn[2] = true;
+
+        if (Math.abs(BL.getCurrentPosition()) != 0) {
+            encoderCount++;
+            output += Math.abs(BL.getCurrentPosition());
+        } else encoderIsNotPluggedIn[3] = true;
+
+        if (encoderCount == 0)
+            return 0;
+        else
+            return output/encoderCount;
+    }
 }

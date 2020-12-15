@@ -1,8 +1,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @SuppressWarnings("ALL")
 @Autonomous(name="Vision", group="auto")
@@ -11,27 +13,28 @@ public class Auto extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
 
-    int ringCount;
-    //BNO055IMU imu;
+    BNO055IMU imu;
 
+    int ringCount;
+    double globalAngle;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        /*
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        imu.initialize(parameters);*/
+        imu.initialize(parameters);
 
         mDrive.init(hardwareMap);
         Vision vision = new Vision(this);
@@ -47,7 +50,7 @@ public class Auto extends LinearOpMode {
         }
         mDrive.freeze();
     }
-}
+
 
 
     /*
@@ -55,18 +58,19 @@ public class Auto extends LinearOpMode {
         return floor + (ceiling - floor) / (1 + Math.pow(Math.E, stiff * (half - error)));
     }*/
 
-    /*public void templatePIDLinearMovement(double distance, double timeframe)
-    {
-        double conversionIndex = 537.6/((26.0/20.0)*90.0* Math.PI / 25.4); // Ticks per inch
+    public void templatePIDLinearMovement(double distance, double timeframe) {
+        double conversionIndex = 537.6 / ((26.0 / 20.0) * 90.0 * Math.PI / 25.4); // Ticks per inch
         double timeFrame = timeframe; //distance * distanceTimeIndex;
         double errorMargin = 5;
         double powerFloor = 0.25;
         double powerCeiling = 0.8;
 
+        ElapsedTime clock = new ElapsedTime();
         clock.reset();
-        tankDrive.resetEncoders();
-
-        double targetTick = distance / MOTOR_TO_INCHES * NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION *50/47;
+        mDrive.resetEncoders();
+        
+        double targetTick = 1989; // this needs to be
+        // distance / MOTOR_TO_INCHES * NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION * 50 / 47;
         telemetry.addData("ticks", targetTick);
         telemetry.update();
         double error = targetTick;
@@ -79,11 +83,10 @@ public class Auto extends LinearOpMode {
         double timePrev = 0;
 
 
-        while (clock.seconds() < timeFrame && Math.abs(error) > errorMargin && opModeIsActive())
-        {
+        while (clock.seconds() < timeFrame && Math.abs(error) > errorMargin && opModeIsActive()) {
             //output = linearPID.PIDOutput(targetTick,averageEncoderTick(),clock.seconds());
 
-            p = Math.abs(error/targetTick * kP);
+            p = Math.abs(error / targetTick * kP);
             d = 0; //((error - errorPrev) / (time - timePrev)) / 1000 /targetTick * kD;
 
             output = p + d;
@@ -99,16 +102,20 @@ public class Auto extends LinearOpMode {
                 raw += 360;
             double fudgeFactor = 1 - raw / 30;
 
-            runMotor(output, output);
+            mDrive.FL.setPower(output);
+            mDrive.FR.setPower(output);
+            mDrive.BL.setPower(output);
+            mDrive.BR.setPower(output);
 
             errorPrev = error;
 
-            double tempAvg = targetTick > 0 ? tankDrive.getEncoderAvg() : -tankDrive.getEncoderAvg();
+            double tempAvg = targetTick > 0 ? mDrive.getEncoderAvg() : -mDrive.getEncoderAvg();
             error = targetTick - tempAvg;
 
             timePrev = time;
             time = clock.seconds();
 
+            /*
             telemetry.addData("Target", targetTick);
             telemetry.addData("Current", averageEncoderTick());
             telemetry.addData("RM0", tankDrive.RM0.getCurrentPosition());
@@ -121,8 +128,8 @@ public class Auto extends LinearOpMode {
             telemetry.addData("kP", kP);
             telemetry.addData("output", output);
             telemetry.update();
-
-
+            */
         }
-        runMotor(0,0);
-    }*/
+        mDrive.freeze();
+    }
+}
