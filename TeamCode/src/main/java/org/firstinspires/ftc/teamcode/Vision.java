@@ -84,8 +84,8 @@ public class Vision {
         for (int y = bitmap.getHeight() - 1; y > 490; y--)
         {
             int pixel = bitmap.getPixel(x, y);
-            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y-2))) //&& isOrange(bitmap.getPixel(x, y-4))
-                    //&& isOrange(bitmap.getPixel(x, y-6)) && isOrange(bitmap.getPixel(x, y-8)))
+            if(isOrange(bitmap.getPixel(x, y)) && isOrange(bitmap.getPixel(x, y-2)) && isOrange(bitmap.getPixel(x, y-4))
+                    && isOrange(bitmap.getPixel(x, y-6)) && isOrange(bitmap.getPixel(x, y-8)))
             {
                 highY = y;
                 break;
@@ -145,8 +145,8 @@ public class Vision {
                 rgb = picture.getImage(i);
                 break;
             } else {
-                //opMode.telemetry.addLine("Didn't find correct RGB format");
-                //  opMode.telemetry.update();
+                opMode.telemetry.addLine("Didn't find correct RGB format");
+                opMode.telemetry.update();
 
 
             }
