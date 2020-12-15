@@ -18,6 +18,16 @@ public class Auto extends LinearOpMode {
     int ringCount;
     double globalAngle;
 
+
+    public final double WHEEL_DIAMETER = 0; //Wheel diameter in mm
+    public final int MOTOR_GEAR_TEETH = 0; //# of teeth on the motor gear
+    public final int WHEEL_GEAR_TEETH = 0; //# of teeth on the wheel gear
+    public final double GEAR_RATIO = (MOTOR_GEAR_TEETH + 0.0) / WHEEL_GEAR_TEETH; //For every full turn of the motor, the wheel turns this many rotations.
+    public final double MM_TO_INCHES =  25.4;
+    public final double MOTOR_TO_INCHES = GEAR_RATIO * WHEEL_DIAMETER * Math.PI / MM_TO_INCHES; //For every full turn of both motors, the wheel moves forward this many inches
+    public final double NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION = 0;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -68,7 +78,7 @@ public class Auto extends LinearOpMode {
         ElapsedTime clock = new ElapsedTime();
         clock.reset();
         mDrive.resetEncoders();
-        
+
         double targetTick = 1989; // this needs to be
         // distance / MOTOR_TO_INCHES * NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION * 50 / 47;
         telemetry.addData("ticks", targetTick);
