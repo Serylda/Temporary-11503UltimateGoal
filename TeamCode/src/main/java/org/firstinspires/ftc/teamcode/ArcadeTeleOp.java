@@ -33,6 +33,8 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @TeleOp(name="Arcade", group="Arcade")
 //@Disabled
 public class ArcadeTeleOp extends LinearOpMode {
@@ -62,6 +64,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             runPivot();
             runServos();
             doArm();
+            doVarious();
             runVoltageLED();
             //runRGBPatternSwitch();
         }
@@ -169,6 +172,18 @@ public class ArcadeTeleOp extends LinearOpMode {
             mDrive.claw.setPosition(1);
         else if (gamepad2.y)
             mDrive.claw.setPosition(0);
+    }
+    public void doVarious()
+    {
+
+        telemetry.addData("Front left distance", mDrive.distanceFrontLeft.getDistance(DistanceUnit.CM));
+        telemetry.addData("Front right distance", mDrive.distanceFrontRight.getDistance(DistanceUnit.CM));
+        telemetry.addData("Back left distance", mDrive.distanceBackLeft.getDistance(DistanceUnit.CM));
+        telemetry.addData("Back right distance", mDrive.distanceBackRight.getDistance(DistanceUnit.CM));
+        telemetry.speak("test");
+        telemetry.update();
+
+
     }
 
     public void runRGBPatternSwitch()
