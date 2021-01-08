@@ -19,13 +19,12 @@ public class Auto extends LinearOpMode {
     double globalAngle;
 
 
-    public final double WHEEL_DIAMETER = 0; //Wheel diameter in mm
-    public final int MOTOR_GEAR_TEETH = 0; //# of teeth on the motor gear
-    public final int WHEEL_GEAR_TEETH = 0; //# of teeth on the wheel gear
+    public final double WHEEL_DIAMETER = 4.0; //Wheel diameter in inches
+    public final int MOTOR_GEAR_TEETH = 1; //# of teeth on the motor gear
+    public final int WHEEL_GEAR_TEETH = 15; //# of teeth on the wheel gear
     public final double GEAR_RATIO = (MOTOR_GEAR_TEETH + 0.0) / WHEEL_GEAR_TEETH; //For every full turn of the motor, the wheel turns this many rotations.
-    public final double MM_TO_INCHES =  25.4;
-    public final double MOTOR_TO_INCHES = GEAR_RATIO * WHEEL_DIAMETER * Math.PI / MM_TO_INCHES; //For every full turn of both motors, the wheel moves forward this many inches
-    public final double NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION = 0;
+    public final double MOTOR_TO_INCHES = GEAR_RATIO * WHEEL_DIAMETER * Math.PI; //For every full turn of both motors, the wheel moves forward this many inches
+    public final double NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION = 28; //bruh
 
 
     @Override
@@ -53,6 +52,8 @@ public class Auto extends LinearOpMode {
             ringCount = vision.ringCount('r');
             telemetry.addData("Ring Count: ", ringCount);
             telemetry.update();
+
+            linearMovement(48, 5);
         }
 
         waitForStart();
@@ -68,26 +69,26 @@ public class Auto extends LinearOpMode {
         return floor + (ceiling - floor) / (1 + Math.pow(Math.E, stiff * (half - error)));
     }*/
 
-    public void templatePIDLinearMovement(double distance, double timeframe) {
-        double conversionIndex = 537.6 / ((26.0 / 20.0) * 90.0 * Math.PI / 25.4); // Ticks per inch
+    public void linearMovement(double distance, double timeframe) {
+        double conversionIndex = NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION / MOTOR_TO_INCHES; // ticks per inch
         double timeFrame = timeframe; //distance * distanceTimeIndex;
         double errorMargin = 5;
-        double powerFloor = 0.25;
+        double powerFloor = 0.2;
         double powerCeiling = 0.8;
 
         ElapsedTime clock = new ElapsedTime();
         clock.reset();
         mDrive.resetEncoders();
 
-        double targetTick = 1989; // this needs to be
-        // distance / MOTOR_TO_INCHES * NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION * 50 / 47;
+        double targetTick = -1 * distance * conversionIndex;
         telemetry.addData("ticks", targetTick);
         telemetry.update();
         double error = targetTick;
         double errorPrev = 0;
-        double kP = 1.5;
+        double kP = targetTick / 1200.0;
+        double kI = 0;
         double kD = 0.01;
-        double p, d;
+        double p, i, d;
         double output;
         double time = clock.seconds();
         double timePrev = 0;
@@ -97,6 +98,7 @@ public class Auto extends LinearOpMode {
             //output = linearPID.PIDOutput(targetTick,averageEncoderTick(),clock.seconds());
 
             p = Math.abs(error / targetTick * kP);
+            i = 0; // (time - timePrev) * error * kP;
             d = 0; //((error - errorPrev) / (time - timePrev)) / 1000 /targetTick * kD;
 
             output = p + d;
@@ -125,20 +127,12 @@ public class Auto extends LinearOpMode {
             timePrev = time;
             time = clock.seconds();
 
-            /*
             telemetry.addData("Target", targetTick);
-            telemetry.addData("Current", averageEncoderTick());
-            telemetry.addData("RM0", tankDrive.RM0.getCurrentPosition());
-            telemetry.addData("RM1", tankDrive.RM1.getCurrentPosition());
-            telemetry.addData("LM0", tankDrive.LM0.getCurrentPosition());
-            telemetry.addData("LM1", tankDrive.LM1.getCurrentPosition());
-            telemetry.addData("FF", fudgeFactor);
-            telemetry.addData("raw", raw);
+            telemetry.addData("Current Avg", mDrive.getEncoderAvg());
             telemetry.addData("error", error);
             telemetry.addData("kP", kP);
             telemetry.addData("output", output);
             telemetry.update();
-            */
         }
         mDrive.freeze();
     }
