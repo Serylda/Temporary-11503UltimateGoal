@@ -64,7 +64,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             runPivot();
             runServos();
             doArm();
-            doVarious();
+            //doVarious();
             runVoltageLED();
             //runRGBPatternSwitch();
         }
@@ -175,15 +175,14 @@ public class ArcadeTeleOp extends LinearOpMode {
     }
     public void doVarious()
     {
-
+        /*
         telemetry.addData("Front left distance", mDrive.distanceFrontLeft.getDistance(DistanceUnit.CM));
         telemetry.addData("Front right distance", mDrive.distanceFrontRight.getDistance(DistanceUnit.CM));
         telemetry.addData("Back left distance", mDrive.distanceBackLeft.getDistance(DistanceUnit.CM));
         telemetry.addData("Back right distance", mDrive.distanceBackRight.getDistance(DistanceUnit.CM));
         telemetry.speak("test");
         telemetry.update();
-
-
+        */
     }
 
     public void runRGBPatternSwitch()
