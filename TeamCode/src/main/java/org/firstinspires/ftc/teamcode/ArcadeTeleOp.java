@@ -64,7 +64,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             runPivot();
             runServos();
             doArm();
-            doVarious();
+            //doVarious();
             runVoltageLED();
             //runRGBPatternSwitch();
         }
@@ -147,10 +147,10 @@ public class ArcadeTeleOp extends LinearOpMode {
 
     public void doArm()
     {
-         if (gamepad2.right_stick_button)
-             mDrive.Arm.setPower(gamepad2.right_stick_y);
-         else
-             mDrive.Arm.setPower(gamepad2.right_stick_y / 2);
+        if (gamepad2.right_stick_button)
+            mDrive.Arm.setPower(gamepad2.right_stick_y);
+        else
+            mDrive.Arm.setPower(gamepad2.right_stick_y / 2);
     }
 
     public void runPivot()
@@ -183,7 +183,6 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.speak("test");
         telemetry.update();
         */
-
     }
 
     public void runRGBPatternSwitch()

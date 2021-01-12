@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class DrivetrainHardware {
-    
+
     public DcMotor FL; //Motor 0 - LM0
     public DcMotor BL; //Motor 1 - LM1
     public DcMotor BR; //Motor 2 - RM2
@@ -23,18 +23,20 @@ public class DrivetrainHardware {
 
     public Servo ringHopper, claw;
     public CRServo intake1, intake2;
+
     /*
     public DistanceSensor distanceFrontLeft;
     public DistanceSensor distanceFrontRight;
     public DistanceSensor distanceBackLeft;
     public DistanceSensor distanceBackRight;
     */
+
     public RevBlinkinLedDriver blink;
 
     //public VoltageSensor voltageSensor;
 
     HardwareMap hardwareMap;
-    
+
     public DrivetrainHardware()
     {
         FL = null;
@@ -51,13 +53,16 @@ public class DrivetrainHardware {
         Arm = null;
         claw = null;
         blink = null;
-        /*distanceFrontRight = null;
+
+        /*
+        distanceFrontRight = null;
         distanceFrontLeft = null;
         distanceBackRight = null;
         distanceBackLeft = null;
-*/
+        */
+
     }
-    
+
     public void init(HardwareMap h)
     {
         hardwareMap = h;
@@ -75,12 +80,14 @@ public class DrivetrainHardware {
         claw = hardwareMap.get(Servo.class, "claw");
         intake1 = hardwareMap.get(CRServo.class, "intake1");
         intake2 = hardwareMap.get(CRServo.class, "intake2");
+
         /*
         distanceFrontLeft = hardwareMap.get(DistanceSensor.class, "bus0");
         distanceFrontRight = hardwareMap.get(DistanceSensor.class, "bus1");
         distanceBackLeft = hardwareMap.get(DistanceSensor.class, "bus2");
         distanceBackRight = hardwareMap.get(DistanceSensor.class, "bus3");
         */
+
         //blink = hardwareMap.get(RevSPARKMini.class, "blink");
         blink = hardwareMap.get(RevBlinkinLedDriver.class, "blink");
         blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE);
