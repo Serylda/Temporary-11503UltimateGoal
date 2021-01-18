@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 @SuppressWarnings("ALL")
 @Autonomous(name="Vision", group="auto")
 //@Disabled
@@ -17,15 +19,14 @@ public class Auto extends LinearOpMode {
 
     int ringCount;
     double globalAngle;
+    Orientation lastAngles = new Orientation();
 
-
-    public final double WHEEL_DIAMETER = 0; //Wheel diameter in mm
-    public final int MOTOR_GEAR_TEETH = 0; //# of teeth on the motor gear
-    public final int WHEEL_GEAR_TEETH = 0; //# of teeth on the wheel gear
+    public final double WHEEL_DIAMETER = 4.0; //Wheel diameter in inches
+    public final int MOTOR_GEAR_TEETH = 1; //# of teeth on the motor gear
+    public final int WHEEL_GEAR_TEETH = 15; //# of teeth on the wheel gear
     public final double GEAR_RATIO = (MOTOR_GEAR_TEETH + 0.0) / WHEEL_GEAR_TEETH; //For every full turn of the motor, the wheel turns this many rotations.
-    public final double MM_TO_INCHES =  25.4;
-    public final double MOTOR_TO_INCHES = GEAR_RATIO * WHEEL_DIAMETER * Math.PI / MM_TO_INCHES; //For every full turn of both motors, the wheel moves forward this many inches
-    public final double NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION = 0;
+    public final double MOTOR_TO_INCHES = GEAR_RATIO * WHEEL_DIAMETER * Math.PI; //For every full turn of both motors, the wheel moves forward this many inches
+    public final double NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION = 28; //bruh
 
 
     @Override
@@ -47,12 +48,15 @@ public class Auto extends LinearOpMode {
         imu.initialize(parameters);
 
         mDrive.init(hardwareMap);
-        Vision vision = new Vision(this);
+       // Vision vision = new Vision(this);
 
         while (!isStarted()) {
-            ringCount = vision.ringCount('r');
+            //ringCount = vision.ringCount('r');
             telemetry.addData("Ring Count: ", ringCount);
             telemetry.update();
+
+            linearMovement(48, 10);
+            //turnDegree(90,3);
         }
 
         waitForStart();
@@ -68,38 +72,57 @@ public class Auto extends LinearOpMode {
         return floor + (ceiling - floor) / (1 + Math.pow(Math.E, stiff * (half - error)));
     }*/
 
-    public void templatePIDLinearMovement(double distance, double timeframe) {
-        double conversionIndex = 537.6 / ((26.0 / 20.0) * 90.0 * Math.PI / 25.4); // Ticks per inch
+    public void linearMovement(double distance, double timeframe) {
+        double conversionIndex = NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION / MOTOR_TO_INCHES; // ticks per inch
         double timeFrame = timeframe; //distance * distanceTimeIndex;
         double errorMargin = 5;
-        double powerFloor = 0.25;
-        double powerCeiling = 0.8;
+        double powerFloor = 0;
+        double powerCeiling = 1;
 
         ElapsedTime clock = new ElapsedTime();
         clock.reset();
         mDrive.resetEncoders();
 
-        double targetTick = 1989; // this needs to be
-        // distance / MOTOR_TO_INCHES * NUMBER_OF_ENCODER_TICKS_PER_REVOLUTION * 50 / 47;
-        telemetry.addData("ticks", targetTick);
+        double targetTick = -1 * distance * conversionIndex;
+        telemetry.addData("target tick", targetTick);
         telemetry.update();
-        double error = targetTick;
-        double errorPrev = 0;
-        double kP = 1.5;
-        double kD = 0.01;
-        double p, d;
-        double output;
-        double time = clock.seconds();
-        double timePrev = 0;
 
+        double kP = 0.0004;
+        double kI = 0.00008;
+        double kD = 0.00007;
+
+        double error = targetTick;
+        double errorPrev = error;
+        double time = clock.seconds();
+        double timePrev = time;
+
+        double  p, d, output;
+        double i = 0;
 
         while (clock.seconds() < timeFrame && Math.abs(error) > errorMargin && opModeIsActive()) {
             //output = linearPID.PIDOutput(targetTick,averageEncoderTick(),clock.seconds());
 
-            p = Math.abs(error / targetTick * kP);
-            d = 0; //((error - errorPrev) / (time - timePrev)) / 1000 /targetTick * kD;
+            errorPrev = error;
+            timePrev = time;
 
-            output = p + d;
+            double tempAvg = targetTick > 0 ? mDrive.getEncoderAvg() : -mDrive.getEncoderAvg();
+
+            error = targetTick - tempAvg;
+            time = clock.seconds();
+            //telemetry.addData("error", error);
+            //telemetry.addData("time", time);
+
+            p = Math.abs(error)  * kP;
+            i += (time - timePrev) * Math.abs(error) * kI;
+            d = Math.abs((error - errorPrev) / (time - timePrev) * kD);
+
+            telemetry.addData("P", p);
+            telemetry.addData("I", i);
+            telemetry.addData("D", d);
+
+
+            output = p + i + d;
+            telemetry.addData("output", output);
             output = Math.max(output, powerFloor);
             output = Math.min(output, powerCeiling);
             if (error < 0) output *= -1;
@@ -117,29 +140,87 @@ public class Auto extends LinearOpMode {
             mDrive.BL.setPower(output);
             mDrive.BR.setPower(output);
 
-            errorPrev = error;
-
-            double tempAvg = targetTick > 0 ? mDrive.getEncoderAvg() : -mDrive.getEncoderAvg();
-            error = targetTick - tempAvg;
-
-            timePrev = time;
-            time = clock.seconds();
-
-            /*
-            telemetry.addData("Target", targetTick);
-            telemetry.addData("Current", averageEncoderTick());
-            telemetry.addData("RM0", tankDrive.RM0.getCurrentPosition());
-            telemetry.addData("RM1", tankDrive.RM1.getCurrentPosition());
-            telemetry.addData("LM0", tankDrive.LM0.getCurrentPosition());
-            telemetry.addData("LM1", tankDrive.LM1.getCurrentPosition());
-            telemetry.addData("FF", fudgeFactor);
-            telemetry.addData("raw", raw);
             telemetry.addData("error", error);
-            telemetry.addData("kP", kP);
-            telemetry.addData("output", output);
             telemetry.update();
-            */
         }
         mDrive.freeze();
+        telemetry.addData("movement", " done.");
+        telemetry.update();
+
     }
+
+
+    public void turnDegree(double degree, double timeframe)
+    {
+        lastAngles = imu.getAngularOrientation();
+        double currentAngle = lastAngles.firstAngle;
+        ElapsedTime clock = new ElapsedTime();
+        clock.reset();
+        globalAngle += degree;
+        if (globalAngle > 180)
+            globalAngle -= 360;
+        if (globalAngle < -180)
+            globalAngle += 360;
+        double leftPower, rightPower;
+
+        // restart imu movement tracking.
+        //resetAngle();
+
+        telemetry.addData("currentAngle", currentAngle);
+        telemetry.update();
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        // set power to rotate.
+
+        // rotate until turn is completed.
+
+        double error = globalAngle - currentAngle;
+        double errorPrev = error;
+
+        double time = clock.seconds();
+        double timePrev = time;
+
+        double kp = 1 / 90.0;
+        double kI = 0.5;
+        double kD= 0.5;
+
+        double p, i, d, output;
+
+        while (clock.seconds() < timeframe && Math.abs(globalAngle - imu.getAngularOrientation().firstAngle) > 1 && opModeIsActive()) {
+            lastAngles = imu.getAngularOrientation();
+            currentAngle = lastAngles.firstAngle;
+
+            telemetry.addData("CurrentAngle", currentAngle);
+            telemetry.update();
+
+            timePrev = time;
+            errorPrev = error;
+
+            time = clock.seconds();
+            error = globalAngle - currentAngle;
+
+            if (error > 180)
+                error -= 360;
+            if (error < -180)
+                error += 360;
+
+            p = Math.abs(error) * kp;
+            i = (time - timePrev) * error * kI;
+            d = ((error - errorPrev) / (time - timePrev)) * kD;
+
+            output = p + i + d;
+
+            telemetry.addData("output ", output);
+            telemetry.update();
+
+            mDrive.FL.setPower(-output);
+            mDrive.BL.setPower(-output);
+            mDrive.FR.setPower(output);
+            mDrive.BR.setPower(output);
+        }
+
+        mDrive.freeze();
+    }
+
 }
