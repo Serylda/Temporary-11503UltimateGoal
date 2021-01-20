@@ -52,6 +52,9 @@ public class ArcadeTeleOp extends LinearOpMode {
     {
 
         mDrive.init(hardwareMap);
+
+
+        Vision vision = new Vision(this);
         currentState = IDLE;
         waitForStart();
 
@@ -76,7 +79,7 @@ public class ArcadeTeleOp extends LinearOpMode {
 
         double magnitude = Math.sqrt(x * x + y * y);
         double distance = Math.atan2(y, x);
-        double turn = t;
+        double turn = t/2;
 
 
         //calculate power with angle and magnitude
@@ -180,9 +183,28 @@ public class ArcadeTeleOp extends LinearOpMode {
         telemetry.addData("Front right distance", mDrive.distanceFrontRight.getDistance(DistanceUnit.CM));
         telemetry.addData("Back left distance", mDrive.distanceBackLeft.getDistance(DistanceUnit.CM));
         telemetry.addData("Back right distance", mDrive.distanceBackRight.getDistance(DistanceUnit.CM));
-        telemetry.speak("test");
-        telemetry.update();
         */
+
+        if(gamepad1.x)
+        {
+            telemetry.speak("monkey monkey monkey monkey ape bonobo monkey ape");
+            telemetry.update();
+        }
+        if(gamepad1.y)
+        {
+            telemetry.speak("fax fax fax fax fax fax fax");
+            telemetry.update();
+        }
+        if(gamepad1.a)
+        {
+            telemetry.speak("when, when, when did I ask OHOH LOLOLOLOLOLOLOLOL");
+            telemetry.update();
+        }
+        if(gamepad1.b)
+        {
+            telemetry.speak("N G L T B H asked I M O");
+            telemetry.update();
+        }
 
     }
 

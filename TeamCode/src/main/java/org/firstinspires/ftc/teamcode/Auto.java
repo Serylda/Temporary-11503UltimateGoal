@@ -48,19 +48,18 @@ public class Auto extends LinearOpMode {
         imu.initialize(parameters);
 
         mDrive.init(hardwareMap);
-       // Vision vision = new Vision(this);
+        Vision vision = new Vision(this);
 
         while (!isStarted()) {
-            //ringCount = vision.ringCount('r');
+            ringCount = vision.ringCount('r');
             telemetry.addData("Ring Count: ", ringCount);
             telemetry.update();
-
-            linearMovement(48, 10);
-            //turnDegree(90,3);
         }
 
         waitForStart();
         if (!isStopRequested()) {
+            linearMovement(48, 10);
+            //turnDegree(90,3);
         }
         mDrive.freeze();
     }
