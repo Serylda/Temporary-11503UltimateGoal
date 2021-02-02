@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevSPARKMini;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -18,8 +19,8 @@ public class DrivetrainHardware {
     public DcMotor BR; //Motor 2 - RM2
     public DcMotor FR; //Motor 3 - RM3
     public DcMotor Pivot; //Motor 0
-    public DcMotor FlyWheel1; //Motor 1
-    public DcMotor FlyWheel2; //Motor 2
+    public DcMotorEx FlyWheel1; //Motor 1
+    public DcMotorEx FlyWheel2; //Motor 2
     public DcMotor Arm; //Motor 3
 
     public Servo ringHopper, claw;
@@ -79,8 +80,8 @@ public class DrivetrainHardware {
         FR = hardwareMap.get(DcMotor.class, "M1");
         FL = hardwareMap.get(DcMotor.class, "M2");
         BL = hardwareMap.get(DcMotor.class, "M3");
-        FlyWheel1 = hardwareMap.get(DcMotor.class, "FW1");
-        FlyWheel2 = hardwareMap.get(DcMotor.class, "FW2");
+        FlyWheel1 = hardwareMap.get(DcMotorEx.class, "FW1");
+        FlyWheel2 = hardwareMap.get(DcMotorEx.class, "FW2");
         Pivot = hardwareMap.get(DcMotor.class, "Pivot");
         Arm = hardwareMap.get(DcMotor.class, "Arm");
 
@@ -114,8 +115,8 @@ public class DrivetrainHardware {
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FlyWheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FlyWheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FlyWheel1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        FlyWheel2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freeze();
@@ -164,10 +165,16 @@ public class DrivetrainHardware {
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        FlyWheel1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        FlyWheel2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        FlyWheel1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        FlyWheel2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     public double getEncoderAvg() {
