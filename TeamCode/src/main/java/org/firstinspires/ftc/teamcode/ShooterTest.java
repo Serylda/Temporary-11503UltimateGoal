@@ -32,12 +32,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="shooter test", group="Arcade")
+@TeleOp(name="turnTest", group="Arcade")
 //@Disabled
 public class ShooterTest extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
-    
+
     static final double power = 1;
 
     @Override
@@ -49,20 +49,6 @@ public class ShooterTest extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            //doDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad1.dpad_left)
-            {
-
-            }
-            else if (gamepad1.dpad_right)
-            {
-                mDrive.Pivot.setPower(0.2);
-            }
-            else
-            {
-                mDrive.Pivot.setPower(0);
-
-            }
         }
     }
 
@@ -110,5 +96,19 @@ public class ShooterTest extends LinearOpMode {
         mDrive.FL.setPower(frontRight);
         mDrive.FR.setPower(frontLeft);
     }
+
+    public void turn5()
+    {
+        mDrive.FL.setPower(0.3);
+        mDrive.BL.setPower(0.3);
+        mDrive.FR.setPower(-0.3);
+        mDrive.BR.setPower(-0.3);
+        sleep(150);
+        mDrive.FL.setPower(0);
+        mDrive.BL.setPower(0);
+        mDrive.FR.setPower(0);
+        mDrive.BR.setPower(0);
+    }
+
 
 }

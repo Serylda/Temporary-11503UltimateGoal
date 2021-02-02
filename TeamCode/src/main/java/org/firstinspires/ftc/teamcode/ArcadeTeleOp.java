@@ -67,7 +67,7 @@ public class ArcadeTeleOp extends LinearOpMode {
             runPivot();
             runServos();
             doArm();
-            doVarious();
+            //doVarious();
             runVoltageLED();
             //runRGBPatternSwitch();
         }
@@ -187,17 +187,17 @@ public class ArcadeTeleOp extends LinearOpMode {
 
         if(gamepad1.x)
         {
-            telemetry.speak("monkey monkey monkey monkey ape bonobo monkey ape");
+            telemetry.speak("still haven't asked");
             telemetry.update();
         }
         if(gamepad1.y)
         {
-            telemetry.speak("fax fax fax fax fax fax fax");
+            telemetry.speak("At max rendering distance and I still can't find who asked.");
             telemetry.update();
         }
         if(gamepad1.a)
         {
-            telemetry.speak("when, when, when did I ask OHOH LOLOLOLOLOLOLOLOL");
+            telemetry.speak("when, when, when did I ask LOLOLOLOLOLOLOLOL");
             telemetry.update();
         }
         if(gamepad1.b)

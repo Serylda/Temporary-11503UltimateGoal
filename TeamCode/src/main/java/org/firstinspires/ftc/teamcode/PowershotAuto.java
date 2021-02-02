@@ -9,13 +9,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @SuppressWarnings("ALL")
-@Autonomous(name="Vision", group="auto")
+@Autonomous(name="Powershots", group="auto")
 //@Disabled
-public class Auto extends LinearOpMode {
+public class PowershotAuto extends LinearOpMode {
 
     DrivetrainHardware mDrive = new DrivetrainHardware();
 
     BNO055IMU imu;
+    //ElapsedTime clock = new ElapsedTime();
 
     int ringCount;
     double globalAngle;
@@ -58,8 +59,77 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
         if (!isStopRequested()) {
-            linearMovement(48, 10);
-            //turnDegree(90,3);
+            mDrive.claw.setPosition(1);
+            linearMovement(58, 5);
+            turnDegree(28,5);
+
+            mDrive.ringHopper.setPosition(1);
+            sleep(500);
+            mDrive.Pivot.setPower(-0.7);
+            mDrive.ringHopper.setPosition(0.5);
+            mDrive.FlyWheel1.setPower(1);
+            mDrive.FlyWheel2.setPower(1);
+            sleep(1000);
+            mDrive.Pivot.setPower(0);
+            mDrive.ringHopper.setPosition(1);
+            sleep(1000); //first shot
+            mDrive.ringHopper.setPosition(0.5);
+            turn1();
+            sleep(1000);
+            mDrive.ringHopper.setPosition(1);
+            sleep(500); //second shot
+            mDrive.ringHopper.setPosition(0.5);
+            turn2();
+            sleep(1000);
+            mDrive.ringHopper.setPosition(1);
+            sleep(500); //third shot
+            mDrive.ringHopper.setPosition(0.5);
+            mDrive.FlyWheel1.setPower(0);
+            mDrive.FlyWheel2.setPower(0);
+
+            turnDegree(-28,5);
+
+            switch (ringCount)
+            {
+                case 0:
+                    linearMovement(8, 4);
+                    turnDegree(-60,5);
+                    mDrive.Arm.setPower(-0.75);
+                    sleep(750);
+                    mDrive.claw.setPosition(0);
+                    sleep(500);
+                    mDrive.Arm.setPower(0.5);
+                    sleep(750);
+                    mDrive.Arm.setPower(0);
+                    linearMovement(-4, 4);
+                    break;
+                case 1:
+                    linearMovement(34, 5);
+                    turnDegree(30,5);
+                    mDrive.Arm.setPower(-0.75);
+                    sleep(750);
+                    mDrive.claw.setPosition(0);
+                    sleep(500);
+                    mDrive.Arm.setPower(0.5);
+                    sleep(750);
+                    mDrive.Arm.setPower(0);
+                    turnDegree(-45,5);
+                    linearMovement(-18, 4);
+                    break;
+                case 4:
+                    linearMovement(56, 7);
+                    turnDegree(-60,5);
+                    mDrive.Arm.setPower(-0.75);
+                    sleep(750);
+                    mDrive.claw.setPosition(0);
+                    sleep(500);
+                    mDrive.Arm.setPower(0.5);
+                    sleep(750);
+                    mDrive.Arm.setPower(0);
+                    turnDegree(45,5);
+                    linearMovement(-44, 5);
+                    break;
+            }
         }
         mDrive.freeze();
     }
@@ -87,15 +157,15 @@ public class Auto extends LinearOpMode {
         telemetry.update();
 
         double kP = 0.0004;
-        double kI = 0.00008;
-        double kD = 0.00007;
+        double kI = 0.00007;
+        double kD = 0.000068;
 
         double error = targetTick;
         double errorPrev = error;
         double time = clock.seconds();
         double timePrev = time;
 
-        double  p, d, output;
+        double p, d, output;
         double i = 0;
 
         while (clock.seconds() < timeFrame && Math.abs(error) > errorMargin && opModeIsActive()) {
@@ -111,7 +181,7 @@ public class Auto extends LinearOpMode {
             //telemetry.addData("error", error);
             //telemetry.addData("time", time);
 
-            p = Math.abs(error)  * kP;
+            p = Math.abs(error) * kP;
             i += (time - timePrev) * Math.abs(error) * kI;
             d = Math.abs((error - errorPrev) / (time - timePrev) * kD);
 
@@ -145,12 +215,13 @@ public class Auto extends LinearOpMode {
         mDrive.freeze();
         telemetry.addData("movement", " done.");
         telemetry.update();
-
     }
 
 
-    public void turnDegree(double degree, double timeframe)
+        public void turnDegree(double degree, double timeframe)
     {
+        telemetry.addLine("made it");
+        telemetry.update();
         lastAngles = imu.getAngularOrientation();
         double currentAngle = lastAngles.firstAngle;
         ElapsedTime clock = new ElapsedTime();
@@ -164,9 +235,6 @@ public class Auto extends LinearOpMode {
 
         // restart imu movement tracking.
         //resetAngle();
-
-        telemetry.addData("currentAngle", currentAngle);
-        telemetry.update();
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
 
@@ -180,18 +248,16 @@ public class Auto extends LinearOpMode {
         double time = clock.seconds();
         double timePrev = time;
 
-        double kp = 1 / 90.0;
-        double kI = 0.5;
-        double kD= 0.5;
+        double kP = 0.0118;
+        double kI = 0.005;
+        double kD = 0.002;
 
-        double p, i, d, output;
+        double p, d, output;
+        double i = 0;
 
-        while (clock.seconds() < timeframe && Math.abs(globalAngle - imu.getAngularOrientation().firstAngle) > 1 && opModeIsActive()) {
+        while (clock.seconds() < timeframe && Math.abs(error) > 1 && opModeIsActive()) {
             lastAngles = imu.getAngularOrientation();
             currentAngle = lastAngles.firstAngle;
-
-            telemetry.addData("CurrentAngle", currentAngle);
-            telemetry.update();
 
             timePrev = time;
             errorPrev = error;
@@ -199,27 +265,73 @@ public class Auto extends LinearOpMode {
             time = clock.seconds();
             error = globalAngle - currentAngle;
 
+
+
             if (error > 180)
                 error -= 360;
             if (error < -180)
                 error += 360;
 
-            p = Math.abs(error) * kp;
-            i = (time - timePrev) * error * kI;
-            d = ((error - errorPrev) / (time - timePrev)) * kD;
+            p = Math.abs(error) * kP;
+            i += (time - timePrev) * Math.abs(error) * kI;
+            d = ((Math.abs(error) - Math.abs(errorPrev)) / (time - timePrev)) * kD;
 
             output = p + i + d;
 
-            telemetry.addData("output ", output);
+
+
+            //telemetry.addData("output ", output);
+            telemetry.addData("globalAngle", globalAngle);
+            telemetry.addData("currentAngle", currentAngle);
+            telemetry.addData("error ", error);
+            //telemetry.addData("p", p);
+            //telemetry.addData("i", i);
+            //telemetry.addData("d", d);*/
             telemetry.update();
 
-            mDrive.FL.setPower(-output);
-            mDrive.BL.setPower(-output);
-            mDrive.FR.setPower(output);
-            mDrive.BR.setPower(output);
-        }
 
+            if (error > 0)
+            {
+                mDrive.FL.setPower(output);
+                mDrive.BL.setPower(output);
+                mDrive.FR.setPower(-output);
+                mDrive.BR.setPower(-output);
+            }
+            else
+            {
+                mDrive.FL.setPower(-output);
+                mDrive.BL.setPower(-output);
+                mDrive.FR.setPower(output);
+                mDrive.BR.setPower(output);
+            }
+        }
         mDrive.freeze();
+    }
+
+    public void turn1()
+    {
+        mDrive.FL.setPower(0.3);
+        mDrive.BL.setPower(0.3);
+        mDrive.FR.setPower(-0.3);
+        mDrive.BR.setPower(-0.3);
+        sleep(125);
+        mDrive.FL.setPower(0);
+        mDrive.BL.setPower(0);
+        mDrive.FR.setPower(0);
+        mDrive.BR.setPower(0);
+    }
+
+    public void turn2()
+    {
+        mDrive.FL.setPower(0.3);
+        mDrive.BL.setPower(0.3);
+        mDrive.FR.setPower(-0.3);
+        mDrive.BR.setPower(-0.3);
+        sleep(105);
+        mDrive.FL.setPower(0);
+        mDrive.BL.setPower(0);
+        mDrive.FR.setPower(0);
+        mDrive.BR.setPower(0);
     }
 
 }

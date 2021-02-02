@@ -105,12 +105,12 @@ public class Vision {
         {
             return 0;
         }
-        else if (highY <= 200)
+        else if (highY <= 100)
         {
             return 4;
         }
         else {
-            for (int y = highY - 200; y <= highY - 10; y++) {
+            for (int y = highY - 100; y <= highY - 10; y++) {
 
 
                 int orangeCount = 0;
@@ -133,7 +133,8 @@ public class Vision {
             opMode.telemetry.update();
             */
 
-            if (yRange < 50) {
+            if (yRange < 83)
+            {
                 return 1;
             } else {
                 return 4;

@@ -106,10 +106,18 @@ public class DrivetrainHardware {
         distanceBackRight = hardwareMap.get(DistanceSensor.class, "bus3");
         */
 
-        //blink = hardwareMap.get(RevSPARKMini.class, "blink");
         blink = hardwareMap.get(RevBlinkinLedDriver.class, "blink");
         blink.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE);
-        //blink.;
+
+
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FlyWheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FlyWheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freeze();
 
         FL.setDirection(DcMotor.Direction.FORWARD);
@@ -120,6 +128,7 @@ public class DrivetrainHardware {
         FlyWheel2.setDirection(DcMotor.Direction.REVERSE);
         Pivot.setDirection(DcMotor.Direction.FORWARD);
         Arm.setDirection(DcMotor.Direction.FORWARD);
+
 
     }
 
